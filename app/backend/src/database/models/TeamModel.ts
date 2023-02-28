@@ -11,12 +11,12 @@ Team.init({
     type: INTEGER,
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   teamName: {
     type: STRING,
     allowNull: false,
-  }
+  },
 }, {
   // ... Outras configs
   underscored: true,
