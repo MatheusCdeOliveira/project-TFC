@@ -49,11 +49,7 @@ describe('Teste da camada model de teams', () => {
      chaiHttpResponse = await chai
         .request(app).get('/teams').send(teams);
 
-    expect(chaiHttpResponse).to.deep.equal(teams);
+    expect(chaiHttpResponse.body).to.deep.equal(teams);
     expect(chaiHttpResponse.status).to.be.equal(200);
    });
-
-  it('Seu sub-teste', () => {
-    expect(true).to.be.eq(true);
-  });
 });
