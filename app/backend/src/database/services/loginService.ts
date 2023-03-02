@@ -15,7 +15,7 @@ export default class LoginService implements ILoginService {
       const hash = user.password;
       const isValid = await bcrypt.compare(password, hash);
       if (isValid) {
-        const token = generateToken(email);
+        const token = generateToken(email, user.role);
         return { token };
       }
       return null;

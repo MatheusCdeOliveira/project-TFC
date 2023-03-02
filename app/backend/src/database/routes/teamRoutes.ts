@@ -5,6 +5,7 @@ import validateEmail from '../middlewares/validateEmail';
 import validateLogin from '../middlewares/validateLogin';
 import LoginService from '../services/loginService';
 import TeamService from '../services/TeamService';
+import authenticationMiddleware from '../middlewares/authValidate';
 
 const teamRoutes = Router();
 const teamService = new TeamService();
@@ -16,10 +17,16 @@ const loginRoutes = Router();
 const loginService = new LoginService();
 const loginController = new LoginController(loginService);
 loginRoutes.post(
-  '/login',
+  '/',
   validateLogin,
   validateEmail,
   (req: Request, res: Response) => loginController.login(req, res),
+);
+
+loginRoutes.get(
+  '/role',
+  authenticationMiddleware,
+  (req: Request, res: Response) => loginController.authenticateLogin(req, res),
 );
 
 export default teamRoutes;

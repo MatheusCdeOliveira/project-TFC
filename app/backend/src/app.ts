@@ -12,7 +12,7 @@ class App {
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
     this.app.use(teamRoutes);
-    this.app.use(loginRoutes);
+    this.app.use('/login', loginRoutes);
   }
 
   private config():void {
