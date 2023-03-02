@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import LoginController from '../controllers/LoginController';
 import TeamController from '../controllers/TeamController';
+import validateEmail from '../middlewares/validateEmail';
 import validateLogin from '../middlewares/validateLogin';
 import LoginService from '../services/loginService';
 import TeamService from '../services/TeamService';
@@ -17,6 +18,7 @@ const loginController = new LoginController(loginService);
 loginRoutes.post(
   '/login',
   validateLogin,
+  validateEmail,
   (req: Request, res: Response) => loginController.login(req, res),
 );
 

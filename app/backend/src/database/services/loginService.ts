@@ -8,7 +8,7 @@ import generateToken from '../utils/token';
 export default class LoginService implements ILoginService {
   protected model: ModelStatic<User> = User;
 
-  async login(data: ILogin): Promise<User | Ttoken> {
+  async login(data: ILogin): Promise<User | Ttoken | null> {
     const { email, password } = data;
     const user = await this.model.findOne({ where: { email } });
     if (user) {
@@ -18,7 +18,8 @@ export default class LoginService implements ILoginService {
         const token = generateToken(email);
         return { token };
       }
+      return null;
     }
-    return user as User;
+    return user;
   }
 }

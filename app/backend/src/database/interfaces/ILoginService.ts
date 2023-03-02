@@ -5,6 +5,10 @@ export type Ttoken = {
   token: string
 };
 
+export type Tmessage = {
+  message: string
+};
+
 export default interface ILoginService {
-  login(data: ILogin): Promise<User | Ttoken>
+  login(data: ILogin): Promise<User | Ttoken | null>
 }

@@ -10,6 +10,7 @@ class LoginController {
 
   async login(req: Request, res: Response) {
     const user = await this._service.login(req.body);
+    if (!user) return res.status(401).json({ message: 'Invalid email or password' });
     return res.status(200).json(user);
   }
 }
