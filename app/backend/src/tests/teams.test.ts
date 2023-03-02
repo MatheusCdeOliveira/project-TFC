@@ -32,6 +32,11 @@ describe('Teste da camada model de teams', () => {
     },
   ]
 
+  const team = {
+    id: 3,
+    teamName: "Botafogo"
+  }
+
    let chaiHttpResponse: Response;
 
    beforeEach(async () => {
@@ -40,16 +45,26 @@ describe('Teste da camada model de teams', () => {
       .resolves(
        teams as Team[]);
    });
-
+   
    afterEach(()=>{
      (Team.findAll as sinon.SinonStub).restore();
-   })
+    })
+    
+    it('Verifica se retorna todos os times com o status 200', async () => {
 
-   it('Verifica se retorna todos os times com o status 200', async () => {
      chaiHttpResponse = await chai
         .request(app).get('/teams').send(teams);
 
     expect(chaiHttpResponse.body).to.deep.equal(teams);
     expect(chaiHttpResponse.status).to.be.equal(200);
    });
+
+   it('Verifica se retorna um time com o status 200', async () => {
+    sinon.stub(Team, 'findOne').resolves(team as Team);
+
+    chaiHttpResponse = await chai.request(app).get('/teams/:id');
+
+    expect(chaiHttpResponse.body).to.deep.equal(team);
+    expect(chaiHttpResponse.status).to.be.equal(200);
+   })
 });

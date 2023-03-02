@@ -9,6 +9,7 @@ class MatchService implements IMatchService {
   async readAll(): Promise<Match[]> {
     const matches = await this.model
       .findAll({
+        raw: true,
         include: [
           { model: Team, as: 'homeTeam', attributes: ['teamName'] },
           { model: Team, as: 'awayTeam', attributes: ['teamName'] },
