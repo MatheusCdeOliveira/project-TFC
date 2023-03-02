@@ -6,6 +6,8 @@ import validateLogin from '../middlewares/validateLogin';
 import LoginService from '../services/loginService';
 import TeamService from '../services/TeamService';
 import authenticationMiddleware from '../middlewares/authValidate';
+import MatchService from '../services/MatchService';
+import MatchController from '../controllers/MatchController';
 
 const teamRoutes = Router();
 const teamService = new TeamService();
@@ -29,5 +31,10 @@ loginRoutes.get(
   (req: Request, res: Response) => loginController.authenticateLogin(req, res),
 );
 
+const matchRoutes = Router();
+const matchService = new MatchService();
+const matchController = new MatchController(matchService);
+matchRoutes.get('/', (req: Request, res: Response) => matchController.readAll(req, res));
+
 export default teamRoutes;
-export { loginRoutes };
+export { loginRoutes, matchRoutes };
