@@ -48,6 +48,17 @@ class MatchController {
       return res.status(500).json({ message: error.message });
     }
   }
+
+  async matchUpdate(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const result = await this._service.matchUpdate(req.body, Number(id));
+      return res.status(200).json(result);
+    } catch (err) {
+      const error = err as Error;
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 export default MatchController;

@@ -1,5 +1,5 @@
 import { ModelStatic } from 'sequelize';
-import IMatchService, { IMatchMessage } from '../interfaces/IMatchService';
+import IMatchService, { IMatchMessage, TBody } from '../interfaces/IMatchService';
 import Match from '../models/MatchModel';
 import Team from '../models/TeamModel';
 
@@ -35,6 +35,11 @@ class MatchService implements IMatchService {
   async matchFinish(id: number): Promise<IMatchMessage> {
     await this.model.update({ inProgress: false }, { where: { id } });
     return { message: 'Finished' };
+  }
+
+  async matchUpdate(body: TBody, id: number): Promise<[number]> {
+    const updateRow = await this.model.update({ ...body }, { where: { id } });
+    return updateRow;
   }
 }
 
