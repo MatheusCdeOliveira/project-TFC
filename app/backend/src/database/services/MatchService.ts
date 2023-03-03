@@ -1,5 +1,8 @@
 import { ModelStatic } from 'sequelize';
-import IMatchService, { IMatchMessage, TBody } from '../interfaces/IMatchService';
+import IMatchService, {
+  IMatchMessage,
+  TBodyCreate,
+  TBodyUpdate } from '../interfaces/IMatchService';
 import Match from '../models/MatchModel';
 import Team from '../models/TeamModel';
 
@@ -37,9 +40,15 @@ class MatchService implements IMatchService {
     return { message: 'Finished' };
   }
 
-  async matchUpdate(body: TBody, id: number): Promise<[number]> {
+  async matchUpdate(body: TBodyUpdate, id: number): Promise<[number]> {
     const updateRow = await this.model.update({ ...body }, { where: { id } });
     return updateRow;
+  }
+
+  async createMatch(body: TBodyCreate): Promise<Match> {
+    const { dataValues: { id } } = await this.model.create({ ...body });
+    const newMatch = await this.model.findOne({ where: { id } });
+    return newMatch as Match;
   }
 }
 

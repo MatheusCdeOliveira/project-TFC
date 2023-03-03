@@ -23,4 +23,10 @@ matchRoutes.patch(
   (req: Request, res: Response) => matchController.matchUpdate(req, res),
 );
 
+matchRoutes.post(
+  '/',
+  authenticationMiddleware,
+  (req: Request, res: Response) => matchController.createMatch(req, res),
+);
+
 export default matchRoutes;
