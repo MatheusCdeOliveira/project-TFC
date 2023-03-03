@@ -63,7 +63,8 @@ class MatchController {
   async createMatch(req: Request, res: Response) {
     try {
       const result = await this._service.createMatch(req.body);
-      return res.status(201).json(result);
+      return res.status(result.status)
+        .json(typeof result.message === 'string' ? { message: result.message } : result.message);
     } catch (err) {
       const error = err as Error;
       return res.status(500).json({ message: error.message });

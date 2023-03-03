@@ -1,6 +1,7 @@
-import { ModelStatic } from 'sequelize';
+import { Op, ModelStatic } from 'sequelize';
 import IMatchService, {
   IMatchMessage,
+  TBody,
   TBodyCreate,
   TBodyUpdate } from '../interfaces/IMatchService';
 import Match from '../models/MatchModel';
@@ -45,10 +46,19 @@ class MatchService implements IMatchService {
     return updateRow;
   }
 
-  async createMatch(body: TBodyCreate): Promise<Match> {
+  async createMatch(body: TBodyCreate): Promise<TBody> {
+    const { homeTeamId, awayTeamId } = body;
+    if (homeTeamId === awayTeamId) {
+      return { status: 422, message: 'It is not possible to create a match with two equal teams' };
+    }
+    const teamsExist = await Team
+      .findAll({ where: { id: { [Op.or]: [homeTeamId, awayTeamId] } } });
+    if (teamsExist.length !== 2) {
+      return { status: 404, message: 'There is no team with such id!' };
+    }
     const { dataValues: { id } } = await this.model.create({ ...body });
     const newMatch = await this.model.findOne({ where: { id } });
-    return newMatch as Match;
+    return { status: 201, message: newMatch } as TBody;
   }
 }
 
