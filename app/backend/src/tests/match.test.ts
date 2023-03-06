@@ -7,7 +7,7 @@ import { app } from '../app';
 
 import { Response } from 'superagent';
 import Match from '../database/models/MatchModel';
-import { allMatches } from './mocks/matchMock';
+import { allMatches, matchsInProgress } from './mocks/matchMock';
 // import { allMatches } from './mocks/matchMock';
 
 chai.use(chaiHttp);
@@ -23,8 +23,11 @@ describe('Teste da camada model de Match', () => {
 
    beforeEach(async () => {
     sinon
-       .stub(Match, "findAll")
-      .resolves(allMatches as unknown as Match[]);
+      .stub(Match, "findAll")
+      .onFirstCall()
+      .resolves(allMatches as unknown as Match[])
+      .onSecondCall()
+      .resolves(matchsInProgress as unknown as Match[])
    });
 
    afterEach(()=>{
@@ -36,6 +39,16 @@ describe('Teste da camada model de Match', () => {
         .request(app).get('/matches');
 
     expect(chaiHttpResponse.body).to.deep.equal(allMatches);
+    expect(chaiHttpResponse.status).to.be.equal(200);
+   });
+
+   it('Verifica se retorna todos as partidas em andamento o status 200', async () => {
+     chaiHttpResponse = await chai
+        .request(app).get('/matches?inProgress=true');
+
+        console.log(chaiHttpResponse.body)
+
+    expect(chaiHttpResponse.body).to.deep.equal(matchsInProgress);
     expect(chaiHttpResponse.status).to.be.equal(200);
    });
 });
