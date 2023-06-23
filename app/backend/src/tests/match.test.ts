@@ -46,8 +46,6 @@ describe('Teste da camada model de Match', () => {
      chaiHttpResponse = await chai
         .request(app).get('/matches?inProgress=true');
 
-        console.log(chaiHttpResponse.body)
-
     expect(chaiHttpResponse.body).to.deep.equal(matchsInProgress);
     expect(chaiHttpResponse.status).to.be.equal(200);
    });
